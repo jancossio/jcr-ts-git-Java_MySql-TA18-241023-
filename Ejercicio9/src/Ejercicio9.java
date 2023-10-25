@@ -17,10 +17,21 @@ public class Ejercicio9 {
 		Connection conexion = mySQLConnection("root","P1gue0N$","");
 		if(conexion != null) {
 			createDB(name0, conexion);
-			createTableFacl(name0, name1, conexion);
-			createTableInvs(name0, name2, conexion);
-			createTableEqps(name0, name3, conexion);
-			createTableResr(name0, name4, conexion);
+			
+			String instFacl = "(Codigo int, Nombre VARCHAR(100), PRIMARY KEY(Codigo))";
+			String instInvs = " (DNI VARCHAR(8), NomApels VARCHAR(255), Facultad int, "
+							+ "FOREIGN KEY(Facultad) references Facultad(Codigo) on delete cascade on update cascade, PRIMARY KEY(DNI))";
+			String instEqps = "(NumSerie VARCHAR(4), Nombre VARCHAR(100), Facultad int, "
+							+ "FOREIGN KEY(Facultad) references Facultad(Codigo) on delete cascade on update cascade, PRIMARY KEY(NumSerie))";
+			String instResr = "(Cajero int, Maquina int, Producto int, FOREIGN KEY(Cajero) references Cajeros(Codigo) on delete cascade on update cascade,"
+							+ "	FOREIGN KEY(Maquina) references Maquinas_Registradoras(Codigo) on delete cascade on update cascade,"
+							+ "	FOREIGN KEY(Producto) references Productos(Codigo) on delete cascade on update cascade,PRIMARY KEY(Cajero, Maquina, Producto))";
+			
+			
+			createTable(name0, name1, instFacl, conexion);
+			createTable(name0, name2, instInvs, conexion);
+			createTable(name0, name3, instEqps, conexion);
+			createTable(name0, name4, instResr, conexion);
 			
 			insertDataFacl(name0, "1", "Cervantes", conexion);
 			insertDataFacl(name0, "2", "Companys", conexion);
@@ -47,6 +58,8 @@ public class Ejercicio9 {
 			insertDataResr(name0, "MNBV87HH", "AAAE", "2023-10-20", "2023-10-20", conexion);
 			
 			closeConnection(conexion);
+		}else {
+			System.out.println("Conexion fallida!");
 		}
 	}
 	
@@ -65,7 +78,7 @@ public class Ejercicio9 {
 			Statement st = conection.createStatement();
 			st.executeUpdate(Query);
 			//closeConnection(conection);
-			mySQLConnection("root","",name);
+			//mySQLConnection("root","",name);
 			JOptionPane.showInputDialog(null, "Se ha creado la Database en el servidor");
 		}catch(SQLException ex) {
 			System.out.println("Fallo al crear la base de datos");
@@ -73,16 +86,16 @@ public class Ejercicio9 {
 		}
 	}
 	
-	public static void createTableFacl(String db, String name, Connection conection){
+	public static void createTable(String db, String name, String instructions, Connection conection){
 		try {
 			String QueryDb = "USE "+db+";";
 			Statement stdb = conection.createStatement();
 			stdb.executeUpdate(QueryDb);
 
-			String Query = "CREATE TABLE "+name+" (Codigo int, Nombre VARCHAR(100), PRIMARY KEY(Codigo))";
+			String Query = "CREATE TABLE "+name+instructions;
 			Statement st = conection.createStatement();
 			stdb.executeUpdate(Query);
-			System.out.println("Tabla creada con exito");
+			System.out.println("Tabla "+name+" creada con exito");
 
 		}catch(SQLException ex) {
 			System.out.println(ex.getMessage());
@@ -90,63 +103,10 @@ public class Ejercicio9 {
 		}
 	}
 	
-	public static void createTableInvs(String db, String name, Connection conection){
-		try {
-			String QueryDb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(QueryDb);
-
-			String Query = "CREATE TABLE "+name+" (DNI VARCHAR(8), NomApels VARCHAR(255), Facultad int, FOREIGN KEY(Facultad) references Facultad(Codigo) on delete cascade on update cascade, PRIMARY KEY(DNI))";
-			Statement st = conection.createStatement();
-			stdb.executeUpdate(Query);
-			System.out.println("Tabla creada con éxito");
-
-		}catch(SQLException ex) {
-			System.out.println(ex.getMessage());
-			System.out.println("Error creando tabla"+name);
-		}
-	}
-	
-	public static void createTableEqps(String db, String name, Connection conection){
-		try {
-			String QueryDb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(QueryDb);
-
-			String Query = "CREATE TABLE "+name+" (NumSerie VARCHAR(4), Nombre VARCHAR(100), Facultad int, FOREIGN KEY(Facultad) references Facultad(Codigo) on delete cascade on update cascade, PRIMARY KEY(NumSerie))";
-			Statement st = conection.createStatement();
-			stdb.executeUpdate(Query);
-			System.out.println("Tabla creada con éxito");
-
-		}catch(SQLException ex) {
-			System.out.println(ex.getMessage());
-			System.out.println("Error creando tabla"+name);
-		}
-	}
-	
-	public static void createTableResr(String db, String name, Connection conection){
-		try {
-			String QueryDb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(QueryDb);
-
-			String Query = "CREATE TABLE "+name+" (DNI VARCHAR(8), NumSerie VARCHAR(4), Comienzo date, Fin date, FOREIGN KEY(DNI) references Investigadores(DNI) on delete cascade on update cascade,"
-											   + "FOREIGN KEY(NumSerie) references Equipos(NumSerie) on delete cascade on update cascade,"
-											   +"PRIMARY KEY(DNI, NumSerie))";
-			Statement st = conection.createStatement();
-			stdb.executeUpdate(Query);
-			System.out.println("Tabla creada con éxito");
-
-		}catch(SQLException ex) {
-			System.out.println(ex.getMessage());
-			System.out.println("Error creando tabla"+name);
-		}
-	}
-	
 	public static Connection mySQLConnection(String user, String password, String name) {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+name,"root", "P1gue0N$");
+			Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+name, user, password);
 			System.out.println("Server connected");
 			JOptionPane.showInputDialog(null, "Se ha creado la conexion con el servidor");
 			return conexion;

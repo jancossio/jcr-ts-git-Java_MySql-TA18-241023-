@@ -16,9 +16,15 @@ public class Ejercicio6 {
 		Connection conexion = mySQLConnection("root","P1gue0N$","");
 		if(conexion != null) {
 			createDB(name0, conexion);
-			createTableProv(name0, name1, conexion);
-			createTablePiez(name0, name2, conexion);
-			createTableSumn(name0, name3, conexion);
+			
+			String instProv = "(Id VARCHAR(4), Nombre  VARCHAR(100), PRIMARY KEY(Id))";
+			String instPiez = "(Codigo int, Nombre VARCHAR(100), PRIMARY KEY(Codigo))";
+			String instSumn = "(CodigoPieza int, IdProveedor VARCHAR(4), Precio int,FOREIGN KEY(CodigoPieza) references Piezas(Codigo) on delete cascade on update cascade,"
+							+ "FOREIGN KEY(IdProveedor) references Proveedores(Id) on delete cascade on update cascade, PRIMARY KEY(CodigoPieza,IdProveedor))";
+			
+			createTable(name0, name1, instProv, conexion);
+			createTable(name0, name2, instPiez, conexion);
+			createTable(name0, name3, instSumn, conexion);
 			
 			insertDataProv(name0, "AAAA", "Prove Piezas",conexion);
 			insertDataProv(name0, "AAAB", "Proveedor 2", conexion);
@@ -39,6 +45,8 @@ public class Ejercicio6 {
 			insertDataSumn(name0, "5", "AAAE", "9", conexion);
 			
 			closeConnection(conexion);
+		}else {
+			System.out.println("Conexion fallida!");
 		}
 	}
 	
@@ -57,7 +65,7 @@ public class Ejercicio6 {
 			Statement st = conection.createStatement();
 			st.executeUpdate(Query);
 			//closeConnection(conection);
-			mySQLConnection("root","",name);
+			//mySQLConnection("root","",name);
 			JOptionPane.showInputDialog(null, "Se ha creado la Database en el servidor");
 		}catch(SQLException ex) {
 			System.out.println("Fallo al crear la base de datos");
@@ -65,16 +73,16 @@ public class Ejercicio6 {
 		}
 	}
 	
-	public static void createTableProv(String db, String name, Connection conection){
+	public static void createTable(String db, String name, String instructions, Connection conection){
 		try {
 			String QueryDb = "USE "+db+";";
 			Statement stdb = conection.createStatement();
 			stdb.executeUpdate(QueryDb);
 
-			String Query = "CREATE TABLE "+name+" (Id VARCHAR(4), Nombre  VARCHAR(100), PRIMARY KEY(Id))";
+			String Query = "CREATE TABLE "+name+instructions;
 			Statement st = conection.createStatement();
 			stdb.executeUpdate(Query);
-			System.out.println("Tabla creada con exito");
+			System.out.println("Tabla "+name+" creada con exito");
 
 		}catch(SQLException ex) {
 			System.out.println(ex.getMessage());
@@ -82,45 +90,10 @@ public class Ejercicio6 {
 		}
 	}
 	
-	public static void createTablePiez(String db, String name, Connection conection){
-		try {
-			String QueryDb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(QueryDb);
-
-			String Query = "CREATE TABLE "+name+" (Codigo int, Nombre VARCHAR(100), PRIMARY KEY(Codigo))";
-			Statement st = conection.createStatement();
-			stdb.executeUpdate(Query);
-			System.out.println("Tabla creada con éxito");
-
-		}catch(SQLException ex) {
-			System.out.println(ex.getMessage());
-			System.out.println("Error creando tabla"+name);
-		}
-	}
-	
-	public static void createTableSumn(String db, String name, Connection conection){
-		try {
-			String QueryDb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(QueryDb);
-
-			String Query = "CREATE TABLE "+name+" (CodigoPieza int, IdProveedor VARCHAR(4), Precio int,FOREIGN KEY(CodigoPieza) references Piezas(Codigo) on delete cascade on update cascade,"
-											   + "FOREIGN KEY(IdProveedor) references Proveedores(Id) on delete cascade on update cascade, PRIMARY KEY(CodigoPieza,IdProveedor))";
-			Statement st = conection.createStatement();
-			stdb.executeUpdate(Query);
-			System.out.println("Tabla creada con éxito");
-
-		}catch(SQLException ex) {
-			System.out.println(ex.getMessage());
-			System.out.println("Error creando tabla"+name);
-		}
-	}
-	
 	public static Connection mySQLConnection(String user, String password, String name) {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+name,"root", "P1gue0N$");
+			Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+name, user, password);
 			System.out.println("Server connected");
 			JOptionPane.showInputDialog(null, "Se ha creado la conexion con el servidor");
 			return conexion;
