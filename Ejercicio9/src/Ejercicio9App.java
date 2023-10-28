@@ -5,48 +5,55 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
-public class Ejercicio7 {
+public class Ejercicio9App {
 	public static void main(String[] args){
 		
-		String name0 = "Ejercicio7";
-		String name1 = "Cientificos";
-		String name2 = "Proyectos";
-		String name3 = "Asignado_A";
+		String name0 = "Ejercicio9";
+		String name1 = "Facultad";
+		String name2 = "Investigadores";
+		String name3 = "Equipos";
+		String name4 = "Reserva";
 		
 		Connection conexion = mySQLConnection("root","P1gue0N$","");
 		if(conexion != null) {
 			createDB(name0, conexion);
 			
-			String instCint = "(DNI VARCHAR(8), NomApels  VARCHAR(255), PRIMARY KEY(DNI))";
-			String instProy = "(Id VARCHAR(4), Nombre VARCHAR(255), Horas int, PRIMARY KEY(Id))";
-			String instAsig = "(Cientifico VARCHAR(8), Proyecto VARCHAR(4),FOREIGN KEY(Cientifico) references Cientificos(DNI) on delete cascade on update cascade,"
-					+ " FOREIGN KEY(Proyecto) references Proyectos(Id) on delete cascade on update cascade, PRIMARY KEY(Cientifico,Proyecto))";
+			String instFacl = "(Codigo int, Nombre VARCHAR(100), PRIMARY KEY(Codigo))";
+			String instInvs = " (DNI VARCHAR(8), NomApels VARCHAR(255), Facultad int, "
+							+ "FOREIGN KEY(Facultad) references Facultad(Codigo) on delete cascade on update cascade, PRIMARY KEY(DNI))";
+			String instEqps = "(NumSerie VARCHAR(4), Nombre VARCHAR(100), Facultad int, "
+							+ "FOREIGN KEY(Facultad) references Facultad(Codigo) on delete cascade on update cascade, PRIMARY KEY(NumSerie))";
+			String instResr = "(DNI VARCHAR(8), NumSerie VARCHAR(4), Comienzo date, Fin date, FOREIGN KEY(DNI) references Investigadores(DNI) on delete cascade on update cascade,"
+							+ "	FOREIGN KEY(NumSerie) references Equipos(NumSerie) on delete cascade on update cascade,"
+							+ "	PRIMARY KEY(DNI, NumSerie))";
 			
-			createTable(name0, name1, instCint, conexion);
-			createTable(name0, name2, instProy, conexion);
-			createTable(name0, name3, instAsig, conexion);
 			
-			String tab1 = "INSERT INTO Cientificos(DNI, NomApels) VALUE(";
+			createTable(name0, name1, instFacl, conexion);
+			createTable(name0, name2, instInvs, conexion);
+			createTable(name0, name3, instEqps, conexion);
+			createTable(name0, name4, instResr, conexion);
 			
-			String[] arguments0 = {"AA12HHAA", "Maria Uncafe"};
-			String[] arguments1 = {"AA64RGAB", "Olga Perez"};
-			String[] arguments2 = {"AA09HYAC", "Dolores Anonimas"};
-			String[] arguments3 = {"AA94JJAD", "David Alvaro"};
-			String[] arguments4 = {"AAPK23AE", "Fatima Calderon"};
+			String tab1 = "INSERT INTO Facultad(Codigo, Nombre) VALUE(";
 			
-			insertData(name0, tab1, arguments0,conexion);
+			String[] arguments0 = {"1", "Cervantes"};
+			String[] arguments1 = {"2", "Companys"};
+			String[] arguments2 = {"3", "Lope de Vega"};
+			String[] arguments3 = {"4", "Shakesphere"};
+			String[] arguments4 = {"5", "Neruda"};
+			
+			insertData(name0, tab1, arguments0, conexion);
 			insertData(name0, tab1, arguments1, conexion);
-			insertData(name0, tab1, arguments2,conexion);
-			insertData(name0, tab1, arguments3,conexion);
+			insertData(name0, tab1, arguments2, conexion);
+			insertData(name0, tab1, arguments3, conexion);
 			insertData(name0, tab1, arguments4, conexion);
 			
-			String tab2 = "INSERT INTO Proyectos(Id, Nombre, Horas) VALUE(";
+			String tab2 = "INSERT INTO Investigadores(DNI, NomApels, Facultad) VALUE(";
 			
-			String[] arguments5 = {"AAAA", "Proyecto de Quimica", "200"};
-			String[] arguments6 = {"AAAB", "Proyecto de Geologia", "168"};
-			String[] arguments7 = {"AAAC", "Proyecto de Fisica", "250"};
-			String[] arguments8 = {"AAAD", "Proyecto de Entomologia", "210"};
-			String[] arguments9 = {"AAAE", "Proyecto de Entomologia", "240"};
+			String[] arguments5 = {"ASDF56TH", "Alberto Umberto", "1"};
+			String[] arguments6 = {"IKOL78UJ", "Leire Marques", "2"};
+			String[] arguments7 = {"ERFD73CD", "Carmen Perez", "3"};
+			String[] arguments8 = {"TGHY22JU", "Africa Palomo", "4"};
+			String[] arguments9 = {"MNBV87HH", "Abril Lopez", "5"};
 			
 			insertData(name0, tab2, arguments5, conexion);
 			insertData(name0, tab2, arguments6, conexion);
@@ -54,19 +61,33 @@ public class Ejercicio7 {
 			insertData(name0, tab2, arguments8, conexion);
 			insertData(name0, tab2, arguments9, conexion);
 			
-			String tab3 = "INSERT INTO Asignado_A(Cientifico, Proyecto) VALUE(";
+			String tab3 = "INSERT INTO Equipos(NumSerie, Nombre ,Facultad) VALUE(";
 			
-			String[] arguments10 = {"AA12HHAA", "AAAA"};
-			String[] arguments11 = {"AA64RGAB", "AAAB"};
-			String[] arguments12 = {"AA09HYAC", "AAAC"};
-			String[] arguments13 = {"AA94JJAD", "AAAD"};
-			String[] arguments14 = {"AAPK23AE", "AAAE"};
+			String[] arguments10 = {"AAAA", "Equipo_A", "1"};
+			String[] arguments11 = {"AAAB", "Equipo_B", "2"};
+			String[] arguments12 = {"AAAC", "Equipo_C", "3"};
+			String[] arguments13 = {"AAAD", "Equipo_D", "4"};
+			String[] arguments14 = {"AAAE", "Equipo_E", "5"};
 			
-			insertData(name0, tab3, arguments10,conexion);
+			insertData(name0, tab3, arguments10, conexion);
 			insertData(name0, tab3, arguments11, conexion);
-			insertData(name0, tab3, arguments12,conexion);
-			insertData(name0, tab3, arguments13,conexion);
+			insertData(name0, tab3, arguments12, conexion);
+			insertData(name0, tab3, arguments13, conexion);
 			insertData(name0, tab3, arguments14, conexion);
+			
+			String tab4 = "INSERT INTO Reserva(DNI, NumSerie, Comienzo, Fin) VALUE(";
+			
+			String[] arguments15 = {"ASDF56TH", "AAAA", "2023-10-20", "2023-10-20"};
+			String[] arguments16 = {"IKOL78UJ", "AAAB", "2023-10-20", "2023-10-20"};
+			String[] arguments17 = {"ERFD73CD", "AAAC", "2023-10-20", "2023-10-20"};
+			String[] arguments18 = {"TGHY22JU", "AAAD", "2023-10-20", "2023-10-20"};
+			String[] arguments19 = {"MNBV87HH", "AAAE", "2023-10-20", "2023-10-20"};
+			
+			insertData(name0, tab4, arguments15, conexion);
+			insertData(name0, tab4, arguments16, conexion);
+			insertData(name0, tab4, arguments17, conexion);
+			insertData(name0, tab4, arguments18, conexion);
+			insertData(name0, tab4, arguments19, conexion);
 			
 			closeConnection(conexion);
 		}else {
@@ -92,7 +113,7 @@ public class Ejercicio7 {
 			//mySQLConnection("root","",name);
 			JOptionPane.showInputDialog(null, "Se ha creado la Database en el servidor");
 		}catch(SQLException ex) {
-			System.out.println("Fallo al crear la base de datos: "+ex);
+			System.out.println("Fallo al crear la base de datos");
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}

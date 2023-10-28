@@ -5,34 +5,34 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
-public class Ejercicio6 {
+public class Ejercicio7App {
 	public static void main(String[] args){
 		
-		String name0 = "Ejercicio6";
-		String name1 = "Proveedores";
-		String name2 = "Piezas";
-		String name3 = "Suministra";
+		String name0 = "Ejercicio7";
+		String name1 = "Cientificos";
+		String name2 = "Proyectos";
+		String name3 = "Asignado_A";
 		
 		Connection conexion = mySQLConnection("root","P1gue0N$","");
 		if(conexion != null) {
 			createDB(name0, conexion);
 			
-			String instProv = "(Id VARCHAR(4), Nombre  VARCHAR(100), PRIMARY KEY(Id))";
-			String instPiez = "(Codigo int, Nombre VARCHAR(100), PRIMARY KEY(Codigo))";
-			String instSumn = "(CodigoPieza int, IdProveedor VARCHAR(4), Precio int,FOREIGN KEY(CodigoPieza) references Piezas(Codigo) on delete cascade on update cascade,"
-							+ "FOREIGN KEY(IdProveedor) references Proveedores(Id) on delete cascade on update cascade, PRIMARY KEY(CodigoPieza,IdProveedor))";
+			String instCint = "(DNI VARCHAR(8), NomApels  VARCHAR(255), PRIMARY KEY(DNI))";
+			String instProy = "(Id VARCHAR(4), Nombre VARCHAR(255), Horas int, PRIMARY KEY(Id))";
+			String instAsig = "(Cientifico VARCHAR(8), Proyecto VARCHAR(4),FOREIGN KEY(Cientifico) references Cientificos(DNI) on delete cascade on update cascade,"
+					+ " FOREIGN KEY(Proyecto) references Proyectos(Id) on delete cascade on update cascade, PRIMARY KEY(Cientifico,Proyecto))";
 			
-			createTable(name0, name1, instProv, conexion);
-			createTable(name0, name2, instPiez, conexion);
-			createTable(name0, name3, instSumn, conexion);
+			createTable(name0, name1, instCint, conexion);
+			createTable(name0, name2, instProy, conexion);
+			createTable(name0, name3, instAsig, conexion);
 			
-			String tab1 = "INSERT INTO Proveedores(Id, Nombre) VALUE(";
+			String tab1 = "INSERT INTO Cientificos(DNI, NomApels) VALUE(";
 			
-			String[] arguments0 = {"AAAA", "Prove Piezas"};
-			String[] arguments1 = {"AAAB", "Proveedor 2"};
-			String[] arguments2 = {"AAAC", "Piezas Anonimas"};
-			String[] arguments3 = {"AAAD", "Clavos y Tornillso"};
-			String[] arguments4 = {"AAAE", "Despiezados"};
+			String[] arguments0 = {"AA12HHAA", "Maria Uncafe"};
+			String[] arguments1 = {"AA64RGAB", "Olga Perez"};
+			String[] arguments2 = {"AA09HYAC", "Dolores Anonimas"};
+			String[] arguments3 = {"AA94JJAD", "David Alvaro"};
+			String[] arguments4 = {"AAPK23AE", "Fatima Calderon"};
 			
 			insertData(name0, tab1, arguments0,conexion);
 			insertData(name0, tab1, arguments1, conexion);
@@ -40,13 +40,13 @@ public class Ejercicio6 {
 			insertData(name0, tab1, arguments3,conexion);
 			insertData(name0, tab1, arguments4, conexion);
 			
-			String tab2 = "INSERT INTO Piezas(Codigo, Nombre) VALUE(";
+			String tab2 = "INSERT INTO Proyectos(Id, Nombre, Horas) VALUE(";
 			
-			String[] arguments5 = {"1", "Juntas"};
-			String[] arguments6 = {"2", "Clavos"};
-			String[] arguments7 = {"3", "Juntas"};
-			String[] arguments8 = {"4", "Tornillos"};
-			String[] arguments9 = {"5", "Tuercas"};
+			String[] arguments5 = {"AAAA", "Proyecto de Quimica", "200"};
+			String[] arguments6 = {"AAAB", "Proyecto de Geologia", "168"};
+			String[] arguments7 = {"AAAC", "Proyecto de Fisica", "250"};
+			String[] arguments8 = {"AAAD", "Proyecto de Entomologia", "210"};
+			String[] arguments9 = {"AAAE", "Proyecto de Entomologia", "240"};
 			
 			insertData(name0, tab2, arguments5, conexion);
 			insertData(name0, tab2, arguments6, conexion);
@@ -54,13 +54,13 @@ public class Ejercicio6 {
 			insertData(name0, tab2, arguments8, conexion);
 			insertData(name0, tab2, arguments9, conexion);
 			
-			String tab3 = "INSERT INTO Suministra(CodigoPieza, IdProveedor, Precio) VALUE(";
+			String tab3 = "INSERT INTO Asignado_A(Cientifico, Proyecto) VALUE(";
 			
-			String[] arguments10 = {"1", "AAAA", "12"};
-			String[] arguments11 = {"2", "AAAB", "15"};
-			String[] arguments12 = {"3", "AAAC", "11"};
-			String[] arguments13 = {"4", "AAAD", "10"};
-			String[] arguments14 = {"5", "AAAE", "9"};
+			String[] arguments10 = {"AA12HHAA", "AAAA"};
+			String[] arguments11 = {"AA64RGAB", "AAAB"};
+			String[] arguments12 = {"AA09HYAC", "AAAC"};
+			String[] arguments13 = {"AA94JJAD", "AAAD"};
+			String[] arguments14 = {"AAPK23AE", "AAAE"};
 			
 			insertData(name0, tab3, arguments10,conexion);
 			insertData(name0, tab3, arguments11, conexion);
@@ -92,7 +92,7 @@ public class Ejercicio6 {
 			//mySQLConnection("root","",name);
 			JOptionPane.showInputDialog(null, "Se ha creado la Database en el servidor");
 		}catch(SQLException ex) {
-			System.out.println("Fallo al crear la base de datos");
+			System.out.println("Fallo al crear la base de datos: "+ex);
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}

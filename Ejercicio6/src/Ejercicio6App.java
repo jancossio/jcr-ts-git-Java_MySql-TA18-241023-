@@ -5,86 +5,68 @@ import java.sql.Statement;
 
 import javax.swing.JOptionPane;
 
-public class Ejercicio8 {
+public class Ejercicio6App {
 	public static void main(String[] args){
 		
-		String name0 = "Ejercicio8";
-		String name1 = "Productos";
-		String name2 = "Cajeros";
-		String name3 = "Maquinas_Registradoras";
-		String name4 = "Venta";
+		String name0 = "Ejercicio6";
+		String name1 = "Proveedores";
+		String name2 = "Piezas";
+		String name3 = "Suministra";
 		
 		Connection conexion = mySQLConnection("root","P1gue0N$","");
 		if(conexion != null) {
 			createDB(name0, conexion);
 			
-			String instProd = "(Codigo int, Nombre VARCHAR(100), Precio int, PRIMARY KEY(Codigo))";
-			String instCajr = "(Codigo int, NomApels VARCHAR(255), PRIMARY KEY(Codigo))";
-			String instMaqs = "(Codigo int, Piso int, PRIMARY KEY(Codigo))";
-			String instVent = "(Cajero int, Maquina int, Producto int, FOREIGN KEY(Cajero) references Cajeros(Codigo) on delete cascade on update cascade,"
-							+ "	FOREIGN KEY(Maquina) references Maquinas_Registradoras(Codigo) on delete cascade on update cascade,"
-							+ "	FOREIGN KEY(Producto) references Productos(Codigo) on delete cascade on update cascade,PRIMARY KEY(Cajero, Maquina, Producto))";
+			String instProv = "(Id VARCHAR(4), Nombre  VARCHAR(100), PRIMARY KEY(Id))";
+			String instPiez = "(Codigo int, Nombre VARCHAR(100), PRIMARY KEY(Codigo))";
+			String instSumn = "(CodigoPieza int, IdProveedor VARCHAR(4), Precio int,FOREIGN KEY(CodigoPieza) references Piezas(Codigo) on delete cascade on update cascade,"
+							+ "FOREIGN KEY(IdProveedor) references Proveedores(Id) on delete cascade on update cascade, PRIMARY KEY(CodigoPieza,IdProveedor))";
 			
-			createTable(name0, name1, instProd, conexion);
-			createTable(name0, name2, instCajr, conexion);
-			createTable(name0, name3, instMaqs, conexion);
-			createTable(name0, name4, instVent, conexion);
+			createTable(name0, name1, instProv, conexion);
+			createTable(name0, name2, instPiez, conexion);
+			createTable(name0, name3, instSumn, conexion);
 			
-			String tab1 = "INSERT INTO Productos(Codigo, Nombre, Precio) VALUE(";
+			String tab1 = "INSERT INTO Proveedores(Id, Nombre) VALUE(";
 			
-			String[] arguments0 = {"1", "Microondas", "200"};
-			String[] arguments1 = {"2", "Camiseta", "16"};
-			String[] arguments2 = {"3", "Detergente", "18"};
-			String[] arguments3 = {"4", "Zapatos", "45"};
-			String[] arguments4 = {"5", "Pantalones", "60"};
+			String[] arguments0 = {"AAAA", "Prove Piezas"};
+			String[] arguments1 = {"AAAB", "Proveedor 2"};
+			String[] arguments2 = {"AAAC", "Piezas Anonimas"};
+			String[] arguments3 = {"AAAD", "Clavos y Tornillso"};
+			String[] arguments4 = {"AAAE", "Despiezados"};
 			
-			insertData(name0, tab1, arguments0, conexion);
+			insertData(name0, tab1, arguments0,conexion);
 			insertData(name0, tab1, arguments1, conexion);
-			insertData(name0, tab1, arguments2, conexion);
-			insertData(name0, tab1, arguments3, conexion);
+			insertData(name0, tab1, arguments2,conexion);
+			insertData(name0, tab1, arguments3,conexion);
 			insertData(name0, tab1, arguments4, conexion);
 			
-			String tab2 = "INSERT INTO Cajeros(Codigo, NomApels) VALUE(";
+			String tab2 = "INSERT INTO Piezas(Codigo, Nombre) VALUE(";
 			
-			String[] arguments5 = {"101", "Maria Lacama"};
-			String[] arguments6 = {"102", "Olga Niza"};
-			String[] arguments7 = {"103", "Yaiza Latorre"};
-			String[] arguments8 = {"104", "Jaime Bulto"};
-			String[] arguments9 = {"105", "Belen tejas"};
+			String[] arguments5 = {"1", "Juntas"};
+			String[] arguments6 = {"2", "Clavos"};
+			String[] arguments7 = {"3", "Juntas"};
+			String[] arguments8 = {"4", "Tornillos"};
+			String[] arguments9 = {"5", "Tuercas"};
 			
-			insertData(name0, tab2, arguments5,conexion);
+			insertData(name0, tab2, arguments5, conexion);
 			insertData(name0, tab2, arguments6, conexion);
-			insertData(name0, tab2, arguments7,conexion);
-			insertData(name0, tab2, arguments8,conexion);
+			insertData(name0, tab2, arguments7, conexion);
+			insertData(name0, tab2, arguments8, conexion);
 			insertData(name0, tab2, arguments9, conexion);
 			
-			String tab3 = "INSERT INTO Maquinas_Registradoras(Codigo, Piso) VALUE(";
+			String tab3 = "INSERT INTO Suministra(CodigoPieza, IdProveedor, Precio) VALUE(";
 			
-			String[] arguments10 = {"201", "1"};
-			String[] arguments11 = {"202", "1"};
-			String[] arguments12 = {"203", "2"};
-			String[] arguments13 = {"204", "3"};
-			String[] arguments14 = {"205", "2"};
+			String[] arguments10 = {"1", "AAAA", "12"};
+			String[] arguments11 = {"2", "AAAB", "15"};
+			String[] arguments12 = {"3", "AAAC", "11"};
+			String[] arguments13 = {"4", "AAAD", "10"};
+			String[] arguments14 = {"5", "AAAE", "9"};
 			
 			insertData(name0, tab3, arguments10,conexion);
 			insertData(name0, tab3, arguments11, conexion);
 			insertData(name0, tab3, arguments12,conexion);
 			insertData(name0, tab3, arguments13,conexion);
 			insertData(name0, tab3, arguments14, conexion);
-			
-			String tab4 = "INSERT INTO Venta(Cajero, Maquina, Producto) VALUE(";
-			
-			String[] arguments15 = {"101", "201", "1"};
-			String[] arguments16 = {"102", "202", "2"};
-			String[] arguments17 = {"103", "203", "3"};
-			String[] arguments18 = {"104", "204", "4"};
-			String[] arguments19 = {"105", "205", "5"};
-			
-			insertData(name0, tab4, arguments15, conexion);
-			insertData(name0, tab4, arguments16, conexion);
-			insertData(name0, tab4, arguments17, conexion);
-			insertData(name0, tab4, arguments18, conexion);
-			insertData(name0, tab4, arguments19, conexion);
 			
 			closeConnection(conexion);
 		}else {
