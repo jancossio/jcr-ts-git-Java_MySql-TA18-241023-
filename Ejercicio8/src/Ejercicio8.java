@@ -30,29 +30,61 @@ public class Ejercicio8 {
 			createTable(name0, name3, instMaqs, conexion);
 			createTable(name0, name4, instVent, conexion);
 			
-			insertDataProd(name0, "1", "Microondas", "200", conexion);
-			insertDataProd(name0, "2", "Camiseta", "16", conexion);
-			insertDataProd(name0, "3", "Detergente", "18", conexion);
-			insertDataProd(name0, "4", "Zapatos", "45", conexion);
-			insertDataProd(name0, "5", "Pantalones", "60", conexion);
+			String tab1 = "INSERT INTO Productos(Codigo, Nombre, Precio) VALUE(";
 			
-			insertDataCajr(name0, "101", "Maria Lacama",conexion);
-			insertDataCajr(name0, "102", "Olga Niza", conexion);
-			insertDataCajr(name0, "103", "Yaiza Latorre",conexion);
-			insertDataCajr(name0, "104", "Jaime Bulto",conexion);
-			insertDataCajr(name0, "105", "Belen tejas", conexion);
+			String[] arguments0 = {"1", "Microondas", "200"};
+			String[] arguments1 = {"2", "Camiseta", "16"};
+			String[] arguments2 = {"3", "Detergente", "18"};
+			String[] arguments3 = {"4", "Zapatos", "45"};
+			String[] arguments4 = {"5", "Pantalones", "60"};
 			
-			insertDataMaqs(name0, "201", "1",conexion);
-			insertDataMaqs(name0, "202", "1", conexion);
-			insertDataMaqs(name0, "203", "2",conexion);
-			insertDataMaqs(name0, "204", "3",conexion);
-			insertDataMaqs(name0, "205", "2", conexion);
+			insertData(name0, tab1, arguments0, conexion);
+			insertData(name0, tab1, arguments1, conexion);
+			insertData(name0, tab1, arguments2, conexion);
+			insertData(name0, tab1, arguments3, conexion);
+			insertData(name0, tab1, arguments4, conexion);
 			
-			insertDataVent(name0, "101", "201", "1", conexion);
-			insertDataVent(name0, "102", "202", "2", conexion);
-			insertDataVent(name0, "103", "203", "3", conexion);
-			insertDataVent(name0, "104", "204", "4", conexion);
-			insertDataVent(name0, "105", "205", "5", conexion);
+			String tab2 = "INSERT INTO Cajeros(Codigo, NomApels) VALUE(";
+			
+			String[] arguments5 = {"101", "Maria Lacama"};
+			String[] arguments6 = {"102", "Olga Niza"};
+			String[] arguments7 = {"103", "Yaiza Latorre"};
+			String[] arguments8 = {"104", "Jaime Bulto"};
+			String[] arguments9 = {"105", "Belen tejas"};
+			
+			insertData(name0, tab2, arguments5,conexion);
+			insertData(name0, tab2, arguments6, conexion);
+			insertData(name0, tab2, arguments7,conexion);
+			insertData(name0, tab2, arguments8,conexion);
+			insertData(name0, tab2, arguments9, conexion);
+			
+			String tab3 = "INSERT INTO Maquinas_Registradoras(Codigo, Piso) VALUE(";
+			
+			String[] arguments10 = {"201", "1"};
+			String[] arguments11 = {"202", "1"};
+			String[] arguments12 = {"203", "2"};
+			String[] arguments13 = {"204", "3"};
+			String[] arguments14 = {"205", "2"};
+			
+			insertData(name0, tab3, arguments10,conexion);
+			insertData(name0, tab3, arguments11, conexion);
+			insertData(name0, tab3, arguments12,conexion);
+			insertData(name0, tab3, arguments13,conexion);
+			insertData(name0, tab3, arguments14, conexion);
+			
+			String tab4 = "INSERT INTO Venta(Cajero, Maquina, Producto) VALUE(";
+			
+			String[] arguments15 = {"101", "201", "1"};
+			String[] arguments16 = {"102", "202", "2"};
+			String[] arguments17 = {"103", "203", "3"};
+			String[] arguments18 = {"104", "204", "4"};
+			String[] arguments19 = {"105", "205", "5"};
+			
+			insertData(name0, tab4, arguments15, conexion);
+			insertData(name0, tab4, arguments16, conexion);
+			insertData(name0, tab4, arguments17, conexion);
+			insertData(name0, tab4, arguments18, conexion);
+			insertData(name0, tab4, arguments19, conexion);
 			
 			closeConnection(conexion);
 		}else {
@@ -113,81 +145,27 @@ public class Ejercicio8 {
 		return null;
 	}
 	
-	public static void insertDataProd(String db, String codigo, String nombre, String precio, Connection conection) {
+	public static void insertData(String db, String table, String[] vars, Connection conection) {
 		try {
 			String Querydb = "USE "+db+";";
 			Statement stdb = conection.createStatement();
 			stdb.executeUpdate(Querydb);
 			
-			String query = "INSERT INTO Productos(Codigo, Nombre, Precio) VALUE("
-					+"\""+codigo+"\", "
-					+"\""+nombre+"\", "
-					+"\""+precio+"\"); ";
+			String query = table;
+			for(int i=0; i<vars.length; i++) {
+				if(i==(vars.length-1)) {
+					query += ("\""+vars[i]+"\"); ");
+				}else {
+					query += ("\""+vars[i]+"\", ");
+				}
+			};
 			
 			Statement st = conection.createStatement();
 			st.executeUpdate(query);
-			System.out.println("Tabla Productos rellenada con exito");
+			System.out.println("Tabla rellenada con exito");
 		}catch(SQLException ex) {
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Productos");
-		}
-	}
-	
-	public static void insertDataCajr(String db, String codigo, String nomApels, Connection conection) {
-		try {
-			String Querydb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(Querydb);
-			
-			String query = "INSERT INTO Cajeros(Codigo, NomApels) VALUE("
-					+"\""+codigo+"\", "
-					+"\""+nomApels+"\"); ";
-			
-			Statement st = conection.createStatement();
-			st.executeUpdate(query);
-			System.out.println("Tabla Cajeros rellenada con exito");
-		}catch(SQLException ex) {
-			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Cajeros");
-		}
-	}
-	
-	public static void insertDataMaqs(String db, String codigo, String piso, Connection conection) {
-		try {
-			String Querydb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(Querydb);
-			
-			String query = "INSERT INTO Maquinas_Registradoras(Codigo, Piso) VALUE("
-					+"\""+codigo+"\", "
-					+"\""+piso+"\"); ";
-			
-			Statement st = conection.createStatement();
-			st.executeUpdate(query);
-			System.out.println("Tabla Maquinas_r rellenada con exito");
-		}catch(SQLException ex) {
-			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Maquinas_r");
-		}
-	}
-	
-	public static void insertDataVent(String db, String cajero, String maquina, String producto, Connection conection) {
-		try {
-			String Querydb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(Querydb);
-			
-			String query = "INSERT INTO Venta(Cajero, Maquina, Producto) VALUE("
-					+"\""+cajero+"\", "
-					+"\""+maquina+"\", "
-					+"\""+producto+"\"); ";
-			
-			Statement st = conection.createStatement();
-			st.executeUpdate(query);
-			System.out.println("Tabla Venta rellenada con exito");
-		}catch(SQLException ex) {
-			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Venta");
+			System.out.println("Error al rellenar la tabla");
 		}
 	}
 }

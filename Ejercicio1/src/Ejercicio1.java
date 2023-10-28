@@ -28,19 +28,28 @@ public class Ejercicio1 {
 			String[] arguments2 = {"3", "Articulos sin fronteras"};
 			String[] arguments3 = {"4", "Cachos sueltos"};
 			String[] arguments4 = {"5", "Componentes"};
-
 			
-			insertDataFabs(name0, "1", "Articulos.sa",conexion);
-			insertDataFabs(name0, "2", "Fabricantes.sl",conexion);
-			insertDataFabs(name0, "3", "Articulos sin fronteras",conexion);
-			insertDataFabs(name0, "4", "Cachos sueltos",conexion);
-			insertDataFabs(name0, "5", "Componentes",conexion);
+			String tab1 = "INSERT INTO Fabricantes(Codigo, Nombre) VALUE(";
 			
-			insertDataArts(name0, "11", "Camisa", "21", "1", conexion);
-			insertDataArts(name0, "12", "Nevera", "799", "2", conexion);
-			insertDataArts(name0, "13", "Pelota", "12", "3", conexion);
-			insertDataArts(name0, "14", "Abrigo", "29", "4", conexion);
-			insertDataArts(name0, "15", "Zapatos", "41", "5", conexion);
+			insertData(name0, tab1, arguments0, conexion);
+			insertData(name0, tab1, arguments1, conexion);
+			insertData(name0, tab1, arguments2, conexion);
+			insertData(name0, tab1, arguments3, conexion);
+			insertData(name0, tab1, arguments4, conexion);
+			
+			String[] arguments6 = {"11", "Camisa", "21", "1"};
+			String[] arguments7 = {"12", "Nevera", "799", "2"};
+			String[] arguments8 = {"13", "Pelota", "12", "3"};
+			String[] arguments9 = {"14", "Abrigo", "29", "4"};
+			String[] arguments10 = {"15", "Zapatos", "41", "5"};
+			
+			String tab2 = "INSERT INTO Articulos(Codigo, Nombre, Precio, Fabricante) VALUE(";
+			
+			insertData(name0, tab2, arguments6, conexion);
+			insertData(name0, tab2,arguments7, conexion);
+			insertData(name0, tab2,arguments8, conexion);
+			insertData(name0, tab2,arguments9, conexion);
+			insertData(name0, tab2,arguments10, conexion);
 			
 			closeConnection(conexion);
 		}else {
@@ -51,7 +60,7 @@ public class Ejercicio1 {
 	public static void closeConnection(Connection Conexion){
 		try {
 			Conexion.close();
-			JOptionPane.showInputDialog(null, "Se ha cerrado la conexion con el servidor");
+			JOptionPane.showMessageDialog(null, "Se ha cerrado la conexion con el servidor");
 		}catch(SQLException ex) {
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -64,7 +73,7 @@ public class Ejercicio1 {
 			st.executeUpdate(Query);
 			//closeConnection(conection);
 			//mySQLConnection("root","",name);
-			JOptionPane.showInputDialog(null, "Se ha creado la Database "+name+" en el servidor");
+			JOptionPane.showMessageDialog(null, "Se ha creado la Database "+name+" en el servidor");
 		}catch(SQLException ex) {
 			System.out.println("Fallo al crear la base de datos");
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
@@ -93,7 +102,7 @@ public class Ejercicio1 {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+name,user, password);
 			System.out.println("Server connected");
-			JOptionPane.showInputDialog(null, "Se ha creado la conexion con el servidor");
+			JOptionPane.showMessageDialog(null, "Se ha creado la conexion con el servidor");
 			return conexion;
 		}catch(SQLException | ClassNotFoundException ex) {
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
@@ -101,43 +110,27 @@ public class Ejercicio1 {
 		return null;
 	}
 	
-	public static void insertDataFabs(String db, String codigo, String nombre, Connection conection) {
+	public static void insertData(String db, String table, String[] vars, Connection conection) {
 		try {
 			String Querydb = "USE "+db+";";
 			Statement stdb = conection.createStatement();
 			stdb.executeUpdate(Querydb);
 			
-			String query = "INSERT INTO Fabricantes(Codigo, Nombre) VALUE("
-					+"\""+codigo+"\", "
-					+"\""+nombre+"\"); ";
+			String query = table;
+			for(int i=0; i<vars.length; i++) {
+				if(i==(vars.length-1)) {
+					query += ("\""+vars[i]+"\"); ");
+				}else {
+					query += ("\""+vars[i]+"\", ");
+				}
+			};
 			
 			Statement st = conection.createStatement();
 			st.executeUpdate(query);
-			System.out.println("Tabla Fabricantes rellenada con exito");
+			System.out.println("Tabla rellenada con exito");
 		}catch(SQLException ex) {
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Fabricantes");
-		}
-	}
-	
-	public static void insertDataArts(String db, String codigo, String nombre, String precio, String fabricante, Connection conection) {
-		try {
-			String Querydb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(Querydb);
-			
-			String query = "INSERT INTO Articulos(Codigo, Nombre, Precio, Fabricante) VALUE("
-					+"\""+codigo+"\", "
-					+"\""+nombre+"\", "
-					+"\""+precio+"\", "
-					+"\""+fabricante+"\"); ";
-			
-			Statement st = conection.createStatement();
-			st.executeUpdate(query);
-			System.out.println("Tabla Articulos rellenada con exito");
-		}catch(SQLException ex) {
-			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Articulos");
+			System.out.println("Error al rellenar la tabla");
 		}
 	}
 }

@@ -23,17 +23,33 @@ public class Ejercicio4 {
 			createTable(name0, name1, instPels, conexion);
 			createTable(name0, name2, instSals, conexion);
 			
-			insertDataPels(name0, "1", "Deep Impact", "13",conexion);
-			insertDataPels(name0, "2", "Armaggedon", "13", conexion);
-			insertDataPels(name0, "3", "Toy Story", "3",conexion);
-			insertDataPels(name0, "4", "Weird Science", "13",conexion);
-			insertDataPels(name0, "5", "Spider Man 2", "7", conexion);
+			String tab1 = "INSERT INTO Peliculas(Codigo, Nombre, CalificacionEdad) VALUE(";
 			
-			insertDataSalas(name0, "11", "Sala 1", "1", conexion);
-			insertDataSalas(name0, "12", "Sala 2", "2", conexion);
-			insertDataSalas(name0, "13", "Sala 3", "3", conexion);
-			insertDataSalas(name0, "14", "Sala 4", "4", conexion);
-			insertDataSalas(name0, "15", "Sala 5", "5", conexion);
+			String[] arguments0 = {"1", "Deep Impact", "13"};
+			String[] arguments1 = {"2", "Armaggedon", "13"};
+			String[] arguments2 = {"3", "Toy Story", "3"};
+			String[] arguments3 = {"4", "Weird Science", "13"};
+			String[] arguments4 = {"5", "Spider Man 2", "7"};
+			
+			insertData(name0, tab1, arguments0,conexion);
+			insertData(name0, tab1, arguments1, conexion);
+			insertData(name0, tab1, arguments2,conexion);
+			insertData(name0, tab1, arguments3,conexion);
+			insertData(name0, tab1, arguments4, conexion);
+			
+			String tab2 = "INSERT INTO Salas(Codigo, Nombre, Pelicula) VALUE(";
+			
+			String[] arguments5 = {"11", "Sala 1", "1"};
+			String[] arguments6 = {"12", "Sala 2", "2"};
+			String[] arguments7 = {"13", "Sala 3", "3"};
+			String[] arguments8 = {"14", "Sala 4", "4"};
+			String[] arguments9 = {"15", "Sala 5", "5"};
+			
+			insertData(name0, tab2, arguments5, conexion);
+			insertData(name0, tab2, arguments6, conexion);
+			insertData(name0, tab2, arguments7, conexion);
+			insertData(name0, tab2, arguments8, conexion);
+			insertData(name0, tab2, arguments9, conexion);
 			
 			closeConnection(conexion);
 		}else {
@@ -59,7 +75,7 @@ public class Ejercicio4 {
 			//mySQLConnection("root","",name);
 			JOptionPane.showInputDialog(null, "Se ha creado la Database en el servidor");
 		}catch(SQLException ex) {
-			System.out.println("Fallo al crear la base de datos");
+			System.out.println("Fallo al crear la base de datos: "+ex);
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
@@ -94,43 +110,27 @@ public class Ejercicio4 {
 		return null;
 	}
 	
-	public static void insertDataPels(String db, String codigo, String nombre, String calificacionEdad, Connection conection) {
+	public static void insertData(String db, String table, String[] vars, Connection conection) {
 		try {
 			String Querydb = "USE "+db+";";
 			Statement stdb = conection.createStatement();
 			stdb.executeUpdate(Querydb);
 			
-			String query = "INSERT INTO Peliculas(Codigo, Nombre, CalificacionEdad) VALUE("
-					+"\""+codigo+"\", "
-					+"\""+nombre+"\", "
-					+"\""+calificacionEdad+"\"); ";
+			String query = table;
+			for(int i=0; i<vars.length; i++) {
+				if(i==(vars.length-1)) {
+					query += ("\""+vars[i]+"\"); ");
+				}else {
+					query += ("\""+vars[i]+"\", ");
+				}
+			};
 			
 			Statement st = conection.createStatement();
 			st.executeUpdate(query);
-			System.out.println("Tabla Peliculas rellenada con exito");
+			System.out.println("Tabla rellenada con exito");
 		}catch(SQLException ex) {
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Peliculas");
-		}
-	}
-	
-	public static void insertDataSalas(String db, String codigo, String nombre, String pelicula, Connection conection) {
-		try {
-			String Querydb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(Querydb);
-			
-			String query = "INSERT INTO Salas(Codigo, Nombre, Pelicula) VALUE("
-					+"\""+codigo+"\", "
-					+"\""+nombre+"\", "
-					+"\""+pelicula+"\"); ";
-			
-			Statement st = conection.createStatement();
-			st.executeUpdate(query);
-			System.out.println("Tabla Salas rellenada con exito");
-		}catch(SQLException ex) {
-			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Salas");
+			System.out.println("Error al rellenar la tabla");
 		}
 	}
 }

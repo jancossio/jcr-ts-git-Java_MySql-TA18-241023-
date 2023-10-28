@@ -23,17 +23,33 @@ public class Ejercicio3 {
 		createTable(name0, name1, instAlms, conexion);
 		createTable(name0, name2, instCajs, conexion);
 		
-		insertDataAlms(name0, "1", "Tarragona", "90",conexion);
-		insertDataAlms(name0, "2", "Barcelona", "80", conexion);
-		insertDataAlms(name0, "3", "Girona", "88",conexion);
-		insertDataAlms(name0, "4", "Madrid", "75",conexion);
-		insertDataAlms(name0, "5", "Lleida", "77", conexion);
+		String tab1 = "INSERT INTO Almacenes(Codigo, Lugar, Capacidad) VALUE(";
 		
-		insertDataCajas(name0, "11AST", "Detergente", "11", "1", conexion);
-		insertDataCajas(name0, "12LDE", "Latas", "3", "2", conexion);
-		insertDataCajas(name0, "13HSK", "Cepillo", "6", "3", conexion);
-		insertDataCajas(name0, "14JIU", "Recogedor", "4", "4", conexion);
-		insertDataCajas(name0, "15LYG", "Limpiador", "8", "5", conexion);
+		String[] arguments0 = {"1", "Tarragona", "90"};
+		String[] arguments1 = {"2", "Barcelona", "80"};
+		String[] arguments2 = {"3", "Girona", "88"};
+		String[] arguments3 = {"4", "Madrid", "75"};
+		String[] arguments4 = {"5", "Lleida", "77"};
+		
+		insertData(name0, tab1, arguments0, conexion);
+		insertData(name0, tab1, arguments1, conexion);
+		insertData(name0, tab1, arguments2, conexion);
+		insertData(name0, tab1, arguments3,conexion);
+		insertData(name0, tab1, arguments4, conexion);
+		
+		String tab2 = "INSERT INTO Cajas(NumReferencia, Contenido, Valor, Almacen) VALUE(";
+		
+		String[] arguments5 = {"11AST", "Detergente", "11", "1"};
+		String[] arguments6 = {"12LDE", "Latas", "3", "2"};
+		String[] arguments7 = {"13HSK", "Cepillo", "6", "3"};
+		String[] arguments8 = {"14JIU", "Recogedor", "4", "4"};
+		String[] arguments9 = { "15LYG", "Limpiador", "8", "5"};
+		
+		insertData(name0, tab2, arguments5, conexion);
+		insertData(name0, tab2, arguments6, conexion);
+		insertData(name0, tab2, arguments7, conexion);
+		insertData(name0, tab2, arguments8, conexion);
+		insertData(name0, tab2, arguments9, conexion);
 		
 		closeConnection(conexion);
 		}else {
@@ -94,44 +110,27 @@ public class Ejercicio3 {
 		return null;
 	}
 	
-	public static void insertDataAlms(String db, String codigo, String lugar, String capacidad, Connection conection) {
+	public static void insertData(String db, String table, String[] vars, Connection conection) {
 		try {
 			String Querydb = "USE "+db+";";
 			Statement stdb = conection.createStatement();
 			stdb.executeUpdate(Querydb);
 			
-			String query = "INSERT INTO Almacenes(Codigo, Lugar, Capacidad) VALUE("
-					+"\""+codigo+"\", "
-					+"\""+lugar+"\", "
-					+"\""+capacidad+"\"); ";
+			String query = table;
+			for(int i=0; i<vars.length; i++) {
+				if(i==(vars.length-1)) {
+					query += ("\""+vars[i]+"\"); ");
+				}else {
+					query += ("\""+vars[i]+"\", ");
+				}
+			};
 			
 			Statement st = conection.createStatement();
 			st.executeUpdate(query);
-			System.out.println("Tabla Almacenes rellenada con exito");
+			System.out.println("Tabla rellenada con exito");
 		}catch(SQLException ex) {
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Almacenes");
-		}
-	}
-	
-	public static void insertDataCajas(String db, String numReferencia, String contenido, String valor, String almacen, Connection conection) {
-		try {
-			String Querydb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(Querydb);
-			
-			String query = "INSERT INTO Cajas(NumReferencia, Contenido, Valor, Almacen) VALUE("
-					+"\""+numReferencia+"\", "
-					+"\""+contenido+"\", "
-					+"\""+valor+"\", "
-					+"\""+almacen+"\"); ";
-			
-			Statement st = conection.createStatement();
-			st.executeUpdate(query);
-			System.out.println("Tabla Cajas rellenada con exito");
-		}catch(SQLException ex) {
-			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Cajas");
+			System.out.println("Error al rellenar la tabla");
 		}
 	}
 }

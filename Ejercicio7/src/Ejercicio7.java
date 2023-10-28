@@ -26,23 +26,47 @@ public class Ejercicio7 {
 			createTable(name0, name2, instProy, conexion);
 			createTable(name0, name3, instAsig, conexion);
 			
-			insertDataCint(name0, "AA12HHAA", "Maria Uncafe",conexion);
-			insertDataCint(name0, "AA64RGAB", "Olga Perez", conexion);
-			insertDataCint(name0, "AA09HYAC", "Dolores Anonimas",conexion);
-			insertDataCint(name0, "AA94JJAD", "David Alvaro",conexion);
-			insertDataCint(name0, "AAPK23AE", "Fatima Calderon", conexion);
+			String tab1 = "INSERT INTO Cientificos(DNI, NomApels) VALUE(";
 			
-			insertDataProy(name0, "AAAA", "Proyecto de Quimica", "200", conexion);
-			insertDataProy(name0, "AAAB", "Proyecto de Geologia", "168", conexion);
-			insertDataProy(name0, "AAAC", "Proyecto de Fisica", "250", conexion);
-			insertDataProy(name0, "AAAD", "Proyecto de Entomologia", "210", conexion);
-			insertDataProy(name0, "AAAE", "Proyecto de Entomologia", "240", conexion);
+			String[] arguments0 = {"AA12HHAA", "Maria Uncafe"};
+			String[] arguments1 = {"AA64RGAB", "Olga Perez"};
+			String[] arguments2 = {"AA09HYAC", "Dolores Anonimas"};
+			String[] arguments3 = {"AA94JJAD", "David Alvaro"};
+			String[] arguments4 = {"AAPK23AE", "Fatima Calderon"};
 			
-			insertDataAsig(name0, "AA12HHAA", "AAAA",conexion);
-			insertDataAsig(name0, "AA64RGAB", "AAAB", conexion);
-			insertDataAsig(name0, "AA09HYAC", "AAAC",conexion);
-			insertDataAsig(name0, "AA94JJAD", "AAAD",conexion);
-			insertDataAsig(name0, "AAPK23AE", "AAAE", conexion);
+			insertData(name0, tab1, arguments0,conexion);
+			insertData(name0, tab1, arguments1, conexion);
+			insertData(name0, tab1, arguments2,conexion);
+			insertData(name0, tab1, arguments3,conexion);
+			insertData(name0, tab1, arguments4, conexion);
+			
+			String tab2 = "INSERT INTO Proyectos(Id, Nombre, Horas) VALUE(";
+			
+			String[] arguments5 = {"AAAA", "Proyecto de Quimica", "200"};
+			String[] arguments6 = {"AAAB", "Proyecto de Geologia", "168"};
+			String[] arguments7 = {"AAAC", "Proyecto de Fisica", "250"};
+			String[] arguments8 = {"AAAD", "Proyecto de Entomologia", "210"};
+			String[] arguments9 = {"AAAE", "Proyecto de Entomologia", "240"};
+			
+			insertData(name0, tab2, arguments5, conexion);
+			insertData(name0, tab2, arguments6, conexion);
+			insertData(name0, tab2, arguments7, conexion);
+			insertData(name0, tab2, arguments8, conexion);
+			insertData(name0, tab2, arguments9, conexion);
+			
+			String tab3 = "INSERT INTO Asignado_A(Cientifico, Proyecto) VALUE(";
+			
+			String[] arguments10 = {"AA12HHAA", "AAAA"};
+			String[] arguments11 = {"AA64RGAB", "AAAB"};
+			String[] arguments12 = {"AA09HYAC", "AAAC"};
+			String[] arguments13 = {"AA94JJAD", "AAAD"};
+			String[] arguments14 = {"AAPK23AE", "AAAE"};
+			
+			insertData(name0, tab3, arguments10,conexion);
+			insertData(name0, tab3, arguments11, conexion);
+			insertData(name0, tab3, arguments12,conexion);
+			insertData(name0, tab3, arguments13,conexion);
+			insertData(name0, tab3, arguments14, conexion);
 			
 			closeConnection(conexion);
 		}else {
@@ -68,7 +92,7 @@ public class Ejercicio7 {
 			//mySQLConnection("root","",name);
 			JOptionPane.showInputDialog(null, "Se ha creado la Database en el servidor");
 		}catch(SQLException ex) {
-			System.out.println("Fallo al crear la base de datos");
+			System.out.println("Fallo al crear la base de datos: "+ex);
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
@@ -103,61 +127,27 @@ public class Ejercicio7 {
 		return null;
 	}
 	
-	public static void insertDataCint(String db, String dni, String nomApels, Connection conection) {
+	public static void insertData(String db, String table, String[] vars, Connection conection) {
 		try {
 			String Querydb = "USE "+db+";";
 			Statement stdb = conection.createStatement();
 			stdb.executeUpdate(Querydb);
 			
-			String query = "INSERT INTO Cientificos(DNI, NomApels) VALUE("
-					+"\""+dni+"\", "
-					+"\""+nomApels+"\"); ";
+			String query = table;
+			for(int i=0; i<vars.length; i++) {
+				if(i==(vars.length-1)) {
+					query += ("\""+vars[i]+"\"); ");
+				}else {
+					query += ("\""+vars[i]+"\", ");
+				}
+			};
 			
 			Statement st = conection.createStatement();
 			st.executeUpdate(query);
-			System.out.println("Tabla Cientificos rellenada con exito");
+			System.out.println("Tabla rellenada con exito");
 		}catch(SQLException ex) {
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Cientificos");
-		}
-	}
-	
-	public static void insertDataProy(String db, String id, String nombre, String horas, Connection conection) {
-		try {
-			String Querydb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(Querydb);
-			
-			String query = "INSERT INTO Proyectos(Id, Nombre, Horas) VALUE("
-					+"\""+id+"\", "
-					+"\""+nombre+"\", "
-					+"\""+horas+"\"); ";
-			
-			Statement st = conection.createStatement();
-			st.executeUpdate(query);
-			System.out.println("Tabla Proyecto rellenada con exito");
-		}catch(SQLException ex) {
-			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Proyecto");
-		}
-	}
-	
-	public static void insertDataAsig(String db, String cientifico, String proyecto, Connection conection) {
-		try {
-			String Querydb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(Querydb);
-			
-			String query = "INSERT INTO Asignado_A(Cientifico, Proyecto) VALUE("
-					+"\""+cientifico+"\", "
-					+"\""+proyecto+"\"); ";
-			
-			Statement st = conection.createStatement();
-			st.executeUpdate(query);
-			System.out.println("Tabla Asignado_A rellenada con exito");
-		}catch(SQLException ex) {
-			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Asignado_A");
+			System.out.println("Error al rellenar la tabla");
 		}
 	}
 }

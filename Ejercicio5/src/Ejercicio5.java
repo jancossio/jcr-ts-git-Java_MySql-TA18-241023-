@@ -25,17 +25,33 @@ public class Ejercicio5 {
 				createTable(name0, name1, instDesp, conexion);
 				createTable(name0, name2, instDirs, conexion);
 				
-				insertDataDesp(name0, "1", "3",conexion);
-				insertDataDesp(name0, "2", "4", conexion);
-				insertDataDesp(name0, "3", "3",conexion);
-				insertDataDesp(name0, "4", "4",conexion);
-				insertDataDesp(name0, "5", "2", conexion);
+				String tab1 = "INSERT INTO Despachos(Numero, Capacidad) VALUE(";
 				
-				insertDataDirs(name0, "27832FG8", "Maria Lorente", "27832FG8", "1", conexion);
-				insertDataDirs(name0, "92742YU6", "Raul Torres", "27832FG8", "2", conexion);
-				insertDataDirs(name0, "91342RD7", "Jaime Salvado", "92742YU6", "3", conexion);
-				insertDataDirs(name0, "98981RD2", "Antonio Perez", "91342RD7", "4", conexion);
-				insertDataDirs(name0, "73828GY7", "Teresa Martin", "98981RD2", "5", conexion);
+				String[] arguments0 = {"1", "3"};
+				String[] arguments1 = {"2", "4"};
+				String[] arguments2 = {"3", "3"};
+				String[] arguments3 = {"4", "4"};
+				String[] arguments4 = {"5", "2"};
+				
+				insertData(name0, tab1, arguments0,conexion);
+				insertData(name0, tab1, arguments1, conexion);
+				insertData(name0, tab1, arguments2,conexion);
+				insertData(name0, tab1, arguments3,conexion);
+				insertData(name0, tab1, arguments4, conexion);
+				
+				String tab2 = "INSERT INTO Directores(DNI, NomApels, DNI_Jefe, Despacho) VALUE(";
+				
+				String[] arguments5 = {"27832FG8", "Maria Lorente", "27832FG8", "1"};
+				String[] arguments6 = {"92742YU6", "Raul Torres", "27832FG8", "2"};
+				String[] arguments7 = {"91342RD7", "Jaime Salvado", "92742YU6", "3"};
+				String[] arguments8 = {"98981RD2", "Antonio Perez", "91342RD7", "4"};
+				String[] arguments9 = {"73828GY7", "Teresa Martin", "98981RD2", "5"};
+				
+				insertData(name0, tab2, arguments5, conexion);
+				insertData(name0, tab2, arguments6, conexion);
+				insertData(name0, tab2, arguments7, conexion);
+				insertData(name0, tab2, arguments8, conexion);
+				insertData(name0, tab2, arguments9, conexion);
 				
 				closeConnection(conexion);
 			}else {
@@ -96,43 +112,27 @@ public class Ejercicio5 {
 			return null;
 		}
 		
-		public static void insertDataDesp(String db, String numero, String capacidad, Connection conection) {
+		public static void insertData(String db, String table, String[] vars, Connection conection) {
 			try {
 				String Querydb = "USE "+db+";";
 				Statement stdb = conection.createStatement();
 				stdb.executeUpdate(Querydb);
 				
-				String query = "INSERT INTO Despachos(Numero, Capacidad) VALUE("
-						+"\""+numero+"\", "
-						+"\""+capacidad+"\"); ";
+				String query = table;
+				for(int i=0; i<vars.length; i++) {
+					if(i==(vars.length-1)) {
+						query += ("\""+vars[i]+"\"); ");
+					}else {
+						query += ("\""+vars[i]+"\", ");
+					}
+				};
 				
 				Statement st = conection.createStatement();
 				st.executeUpdate(query);
-				System.out.println("Tabla Departamentos rellenada con exito");
+				System.out.println("Tabla rellenada con exito");
 			}catch(SQLException ex) {
 				//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-				System.out.println("Error al rellenar la tabla Departamentos");
+				System.out.println("Error al rellenar la tabla");
 			}
 		}
-		
-		public static void insertDataDirs(String db, String dni, String nomApels, String dniJefe, String despacho, Connection conection) {
-			try {
-				String Querydb = "USE "+db+";";
-				Statement stdb = conection.createStatement();
-				stdb.executeUpdate(Querydb);
-				
-				String query = "INSERT INTO Directores(DNI, NomApels, DNI_Jefe, Despacho) VALUE("
-						+"\""+dni+"\", "
-						+"\""+nomApels+"\", "
-						+"\""+dniJefe+"\", "
-						+"\""+despacho+"\"); ";
-				
-				Statement st = conection.createStatement();
-				st.executeUpdate(query);
-				System.out.println("Tabla Directores rellenada con exito");
-			}catch(SQLException ex) {
-				//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-				System.out.println("Error al rellenar la tabla Directores");
-			}
-	}
 }

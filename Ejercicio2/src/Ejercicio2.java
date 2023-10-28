@@ -23,17 +23,33 @@ public class Ejercicio2 {
 			createTable(name0, name1, instDeps, conexion);
 			createTable(name0, name2, instEmps, conexion);
 			
-			insertDataDeps(name0, "1", "I+D", "1500", conexion);
-			insertDataDeps(name0, "2", "Desarrollo","2500",conexion);
-			insertDataDeps(name0, "3", "Produccion","5000",conexion);
-			insertDataDeps(name0, "4", "Marketing","2500",conexion);
-			insertDataDeps(name0, "5", "Recursos Humanos","3500",conexion);
+			String tab1 = "INSERT INTO Departamentos(Codigo, Nombre, Presupuesto) VALUE(";
 			
-			insertDataEmps(name0, "ASDD11FF", "Alfredo", "Lorente", "1", conexion);
-			insertDataEmps(name0, "EGCS12SS", "Ester", "Luengo", "2", conexion);
-			insertDataEmps(name0, "LOHG13RR", "Aitor", "Perez", "3", conexion);
-			insertDataEmps(name0, "ERFD14TT", "Noel", "Dominguez", "4", conexion);
-			insertDataEmps(name0, "FRED15WW", "David", "Alvarez", "5", conexion);
+			String[] arguments0 = {"1", "I+D", "1500"};
+			String[] arguments1 = {"2", "Desarrollo","2500"};
+			String[] arguments2 = {"3", "Produccion","5000"};
+			String[] arguments3 = {"4", "Marketing","2500"};
+			String[] arguments4 = {"5", "Recursos Humanos","3500"};
+			
+			insertData(name0, tab1, arguments0, conexion);
+			insertData(name0, tab1, arguments1,conexion);
+			insertData(name0, tab1, arguments2,conexion);
+			insertData(name0, tab1, arguments3,conexion);
+			insertData(name0, tab1, arguments4,conexion);
+			
+			String tab2 = "INSERT INTO Empleados(DNI, Nombre, Apellidos, Departamento) VALUE(";
+			
+			String[] arguments5 = {"ASDD11FF", "Alfredo", "Lorente", "1"};
+			String[] arguments6 = {"EGCS12SS", "Ester", "Luengo", "2"};
+			String[] arguments7 = {"LOHG13RR", "Aitor", "Perez", "3"};
+			String[] arguments8 = {"ERFD14TT", "Noel", "Dominguez", "4"};
+			String[] arguments9 = {"FRED15WW", "David", "Alvarez", "5"};
+			
+			insertData(name0, tab2, arguments5, conexion);
+			insertData(name0, tab2, arguments6, conexion);
+			insertData(name0, tab2, arguments7, conexion);
+			insertData(name0, tab2, arguments8, conexion);
+			insertData(name0, tab2, arguments9, conexion);
 			
 			closeConnection(conexion);
 		}else {
@@ -94,44 +110,27 @@ public class Ejercicio2 {
 		return null;
 	}
 	
-	public static void insertDataDeps(String db, String codigo, String nombre, String presupuesto, Connection conection) {
+	public static void insertData(String db, String table, String[] vars, Connection conection) {
 		try {
 			String Querydb = "USE "+db+";";
 			Statement stdb = conection.createStatement();
 			stdb.executeUpdate(Querydb);
 			
-			String query = "INSERT INTO Departamentos(Codigo, Nombre, Presupuesto) VALUE("
-					+"\""+codigo+"\", "
-					+"\""+nombre+"\", "
-					+"\""+presupuesto+"\"); ";
+			String query = table;
+			for(int i=0; i<vars.length; i++) {
+				if(i==(vars.length-1)) {
+					query += ("\""+vars[i]+"\"); ");
+				}else {
+					query += ("\""+vars[i]+"\", ");
+				}
+			};
 			
 			Statement st = conection.createStatement();
 			st.executeUpdate(query);
-			System.out.println("Tabla Departamentos rellenada con exito");
+			System.out.println("Tabla rellenada con exito");
 		}catch(SQLException ex) {
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Departamentos");
-		}
-	}
-	
-	public static void insertDataEmps(String db, String dni, String nombre, String apellidos, String departamento, Connection conection) {
-		try {
-			String Querydb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(Querydb);
-			
-			String query = "INSERT INTO Empleados(DNI, Nombre, Apellidos, Departamento) VALUE("
-					+"\""+dni+"\", "
-					+"\""+nombre+"\", "
-					+"\""+apellidos+"\", "
-					+"\""+departamento+"\"); ";
-			
-			Statement st = conection.createStatement();
-			st.executeUpdate(query);
-			System.out.println("Tabla Empleados rellenada con exito");
-		}catch(SQLException ex) {
-			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Empleados");
+			System.out.println("Error al rellenar la tabla");
 		}
 	}
 }

@@ -23,9 +23,9 @@ public class Ejercicio9 {
 							+ "FOREIGN KEY(Facultad) references Facultad(Codigo) on delete cascade on update cascade, PRIMARY KEY(DNI))";
 			String instEqps = "(NumSerie VARCHAR(4), Nombre VARCHAR(100), Facultad int, "
 							+ "FOREIGN KEY(Facultad) references Facultad(Codigo) on delete cascade on update cascade, PRIMARY KEY(NumSerie))";
-			String instResr = "(Cajero int, Maquina int, Producto int, FOREIGN KEY(Cajero) references Cajeros(Codigo) on delete cascade on update cascade,"
-							+ "	FOREIGN KEY(Maquina) references Maquinas_Registradoras(Codigo) on delete cascade on update cascade,"
-							+ "	FOREIGN KEY(Producto) references Productos(Codigo) on delete cascade on update cascade,PRIMARY KEY(Cajero, Maquina, Producto))";
+			String instResr = "(DNI VARCHAR(8), NumSerie VARCHAR(4), Comienzo date, Fin date, FOREIGN KEY(DNI) references Investigadores(DNI) on delete cascade on update cascade,"
+							+ "	FOREIGN KEY(NumSerie) references Equipos(NumSerie) on delete cascade on update cascade,"
+							+ "	PRIMARY KEY(DNI, NumSerie))";
 			
 			
 			createTable(name0, name1, instFacl, conexion);
@@ -33,29 +33,61 @@ public class Ejercicio9 {
 			createTable(name0, name3, instEqps, conexion);
 			createTable(name0, name4, instResr, conexion);
 			
-			insertDataFacl(name0, "1", "Cervantes", conexion);
-			insertDataFacl(name0, "2", "Companys", conexion);
-			insertDataFacl(name0, "3", "Lope de Vega", conexion);
-			insertDataFacl(name0, "4", "Shakesphere", conexion);
-			insertDataFacl(name0, "5", "Neruda", conexion);
+			String tab1 = "INSERT INTO Facultad(Codigo, Nombre) VALUE(";
 			
-			insertDataInvs(name0, "ASDF56TH", "Alberto Umberto", "1", conexion);
-			insertDataInvs(name0, "IKOL78UJ", "Leire Marques", "2", conexion);
-			insertDataInvs(name0, "ERFD73CD", "Carmen Perez", "3", conexion);
-			insertDataInvs(name0, "TGHY22JU", "Africa Palomo", "4", conexion);
-			insertDataInvs(name0, "MNBV87HH", "Abril Lopez", "5", conexion);
+			String[] arguments0 = {"1", "Cervantes"};
+			String[] arguments1 = {"2", "Companys"};
+			String[] arguments2 = {"3", "Lope de Vega"};
+			String[] arguments3 = {"4", "Shakesphere"};
+			String[] arguments4 = {"5", "Neruda"};
 			
-			insertDataEqps(name0, "AAAA", "Equipo_A", "1", conexion);
-			insertDataEqps(name0, "AAAB", "Equipo_B", "2", conexion);
-			insertDataEqps(name0, "AAAC", "Equipo_C", "3", conexion);
-			insertDataEqps(name0, "AAAD", "Equipo_D", "4", conexion);
-			insertDataEqps(name0, "AAAE", "Equipo_E", "5", conexion);
+			insertData(name0, tab1, arguments0, conexion);
+			insertData(name0, tab1, arguments1, conexion);
+			insertData(name0, tab1, arguments2, conexion);
+			insertData(name0, tab1, arguments3, conexion);
+			insertData(name0, tab1, arguments4, conexion);
 			
-			insertDataResr(name0, "ASDF56TH", "AAAA", "2023-10-20", "2023-10-20", conexion);
-			insertDataResr(name0, "IKOL78UJ", "AAAB", "2023-10-20", "2023-10-20", conexion);
-			insertDataResr(name0, "ERFD73CD", "AAAC", "2023-10-20", "2023-10-20", conexion);
-			insertDataResr(name0, "TGHY22JU", "AAAD", "2023-10-20", "2023-10-20", conexion);
-			insertDataResr(name0, "MNBV87HH", "AAAE", "2023-10-20", "2023-10-20", conexion);
+			String tab2 = "INSERT INTO Investigadores(DNI, NomApels, Facultad) VALUE(";
+			
+			String[] arguments5 = {"ASDF56TH", "Alberto Umberto", "1"};
+			String[] arguments6 = {"IKOL78UJ", "Leire Marques", "2"};
+			String[] arguments7 = {"ERFD73CD", "Carmen Perez", "3"};
+			String[] arguments8 = {"TGHY22JU", "Africa Palomo", "4"};
+			String[] arguments9 = {"MNBV87HH", "Abril Lopez", "5"};
+			
+			insertData(name0, tab2, arguments5, conexion);
+			insertData(name0, tab2, arguments6, conexion);
+			insertData(name0, tab2, arguments7, conexion);
+			insertData(name0, tab2, arguments8, conexion);
+			insertData(name0, tab2, arguments9, conexion);
+			
+			String tab3 = "INSERT INTO Equipos(NumSerie, Nombre ,Facultad) VALUE(";
+			
+			String[] arguments10 = {"AAAA", "Equipo_A", "1"};
+			String[] arguments11 = {"AAAB", "Equipo_B", "2"};
+			String[] arguments12 = {"AAAC", "Equipo_C", "3"};
+			String[] arguments13 = {"AAAD", "Equipo_D", "4"};
+			String[] arguments14 = {"AAAE", "Equipo_E", "5"};
+			
+			insertData(name0, tab3, arguments10, conexion);
+			insertData(name0, tab3, arguments11, conexion);
+			insertData(name0, tab3, arguments12, conexion);
+			insertData(name0, tab3, arguments13, conexion);
+			insertData(name0, tab3, arguments14, conexion);
+			
+			String tab4 = "INSERT INTO Reserva(DNI, NumSerie, Comienzo, Fin) VALUE(";
+			
+			String[] arguments15 = {"ASDF56TH", "AAAA", "2023-10-20", "2023-10-20"};
+			String[] arguments16 = {"IKOL78UJ", "AAAB", "2023-10-20", "2023-10-20"};
+			String[] arguments17 = {"ERFD73CD", "AAAC", "2023-10-20", "2023-10-20"};
+			String[] arguments18 = {"TGHY22JU", "AAAD", "2023-10-20", "2023-10-20"};
+			String[] arguments19 = {"MNBV87HH", "AAAE", "2023-10-20", "2023-10-20"};
+			
+			insertData(name0, tab4, arguments15, conexion);
+			insertData(name0, tab4, arguments16, conexion);
+			insertData(name0, tab4, arguments17, conexion);
+			insertData(name0, tab4, arguments18, conexion);
+			insertData(name0, tab4, arguments19, conexion);
 			
 			closeConnection(conexion);
 		}else {
@@ -116,83 +148,27 @@ public class Ejercicio9 {
 		return null;
 	}
 	
-	public static void insertDataFacl(String db, String codigo, String nombre, Connection conection) {
+	public static void insertData(String db, String table, String[] vars, Connection conection) {
 		try {
 			String Querydb = "USE "+db+";";
 			Statement stdb = conection.createStatement();
 			stdb.executeUpdate(Querydb);
 			
-			String query = "INSERT INTO Facultad(Codigo, Nombre) VALUE("
-					+"\""+codigo+"\", "
-					+"\""+nombre+"\"); ";
+			String query = table;
+			for(int i=0; i<vars.length; i++) {
+				if(i==(vars.length-1)) {
+					query += ("\""+vars[i]+"\"); ");
+				}else {
+					query += ("\""+vars[i]+"\", ");
+				}
+			};
 			
 			Statement st = conection.createStatement();
 			st.executeUpdate(query);
-			System.out.println("Tabla Facultad rellenada con exito");
+			System.out.println("Tabla rellenada con exito");
 		}catch(SQLException ex) {
 			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Facultad");
-		}
-	}
-	
-	public static void insertDataInvs(String db, String dni, String nomApels, String facultad, Connection conection) {
-		try {
-			String Querydb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(Querydb);
-			
-			String query = "INSERT INTO Investigadores(DNI, NomApels, Facultad) VALUE("
-					+"\""+dni+"\", "
-					+"\""+nomApels+"\", "
-					+"\""+facultad+"\"); ";
-			
-			Statement st = conection.createStatement();
-			st.executeUpdate(query);
-			System.out.println("Tabla Investigadores rellenada con exito");
-		}catch(SQLException ex) {
-			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Investigadores");
-		}
-	}
-	
-	public static void insertDataEqps(String db, String numSerie, String nombre, String facultad, Connection conection) {
-		try {
-			String Querydb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(Querydb);
-			
-			String query = "INSERT INTO Equipos(NumSerie, Nombre ,Facultad) VALUE("
-					+"\""+numSerie+"\", "
-					+"\""+nombre+"\", "
-					+"\""+facultad+"\"); ";
-			
-			Statement st = conection.createStatement();
-			st.executeUpdate(query);
-			System.out.println("Tabla Equipos rellenada con exito");
-		}catch(SQLException ex) {
-			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Equipos");
-		}
-	}
-	
-	public static void insertDataResr(String db, String dni, String numSerie, String comienzo, String fin, Connection conection) {
-		try {
-			String Querydb = "USE "+db+";";
-			Statement stdb = conection.createStatement();
-			stdb.executeUpdate(Querydb);
-			
-			String query = "INSERT INTO Reserva(DNI, NumSerie, Comienzo, Fin) VALUE("
-					+"\""+dni+"\", "
-					+"\""+numSerie+"\", "
-					+"\""+comienzo+"\", "
-					+"\""+fin+"\"); ";
-			
-			Statement st = conection.createStatement();
-			st.executeUpdate(query);
-			System.out.println("Tabla Reserva rellenada con exito");
-		}catch(SQLException ex) {
-			//Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-			System.out.println("Error al rellenar la tabla Reserva");
+			System.out.println("Error al rellenar la tabla");
 		}
 	}
 }
